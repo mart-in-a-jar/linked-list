@@ -1,5 +1,3 @@
-import "./style.css";
-
 class Node {
   constructor(value) {
     this.value = value;
@@ -7,106 +5,125 @@ class Node {
   }
 }
 
-let HEAD = new Node("Head");
-
 class LinkedList {
-  constructor(someNode) {
-    HEAD.nextNode = null;
+  constructor(headNode) {
+    this.HEAD = headNode;
+    this.HEAD.nextNode = null;
   }
 
   append(value) {
     const newNode = new Node(value);
-    let temp = HEAD;
+    let temp = this.HEAD;
+
     while (temp.nextNode != null) {
       temp = temp.nextNode;
     }
+
     temp.nextNode = newNode;
   }
 
   prepend(value) {
     let newHead = new Node(value);
-    newHead.nextNode = HEAD;
-    HEAD = newHead;
+
+    newHead.nextNode = this.HEAD;
+    this.HEAD = newHead;
   }
 
   size() {
     let count = 0;
-    let temp = HEAD;
+    let temp = this.HEAD;
+
     while (temp != null) {
       temp = temp.nextNode;
       count++;
     }
+
     return count;
   }
 
   head() {
-    return HEAD.value;
+    return this.HEAD.value;
   }
 
   tail() {
-    let temp = HEAD;
+    let temp = this.HEAD;
+
     while (temp.nextNode != null) {
       temp = temp.nextNode;
     }
+
     return temp.value;
   }
 
   at(index) {
-    let temp = HEAD;
+    let temp = this.HEAD;
     let count = 1;
+
     while (temp.nextNode != null && count !== index) {
       temp = temp.nextNode;
       count++;
     }
+
     return temp.value;
   }
 
   pop() {
-    let temp = HEAD;
+    let temp = this.HEAD;
+
     while (temp.nextNode.nextNode != null) {
       temp = temp.nextNode;
     }
+
     temp.nextNode = null;
   }
 
   contains(value) {
-    let temp = HEAD;
+    let temp = this.HEAD;
+
     while (temp != null && temp.value !== value) {
       temp = temp.nextNode;
     }
+
     return temp == null ? false : true;
   }
 
   find(value) {
-    let temp = HEAD;
+    let temp = this.HEAD;
     let index = 0;
+
     while (temp != null) {
-      index++;
       if (temp.value == value) return index;
+      index++;
       temp = temp.nextNode;
     }
+
     return null;
   }
 
   toString() {
-    let temp = HEAD;
+    let temp = this.HEAD;
     let string = "";
+
     while (temp != null) {
+      console.log(temp.value);
       string += `(${temp.value}) -> `;
       temp = temp.nextNode;
     }
+
     string += "(null)";
+
+    return string;
   }
 
   insertAt(value, index) {
-    let temp = HEAD;
+    let temp = this.HEAD;
     let tempNext;
     let count = 1;
     let newNode = new Node(value);
 
     if (index == 0) {
       newNode.nextNode = temp;
-      HEAD = newNode;
+      this.HEAD = newNode;
       return;
     }
 
@@ -117,24 +134,25 @@ class LinkedList {
         newNode.nextNode = tempNext;
         return;
       }
+
       count++;
       temp = temp.nextNode;
     }
   }
 
   removeAt(index) {
-    let temp = HEAD;
-    let count = 0;
-    while (temp != null) {
-      if (index == count) {
-        temp.nextNode = temp.nextNode.nextNode;
-        return;
-      }
-      temp = temp.nextNode;
-      count++;
+    if (index === 0) {
+      const valueOfRemoved = this.HEAD.value;
+      this.HEAD = this.HEAD.nextNode;
+      return valueOfRemoved;
     }
+
+    const nodeBeforeRemovedOne = this.at(index - 1);
+    const valueOfRemoved = nodeBeforeRemovedOne.nextNode.value;
+    nodeBeforeRemovedOne.nextNode = nodeBeforeRemovedOne.nextNode.nextNode;
+
+    return valueOfRemoved;
   }
 }
 
 export { LinkedList, Node };
-
